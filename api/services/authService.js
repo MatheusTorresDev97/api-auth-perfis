@@ -1,4 +1,7 @@
 const database = require('../models')
+const { compare } = require('bcryptjs')
+const { sign } = require('jsonwebtoken')
+const jsonSecret = require('../config/jsonSecret')
 
 class AuthService {
     async login(dto) {
@@ -11,7 +14,21 @@ class AuthService {
         if (!usuario) {
             throw new Error('Usuario não cadastrado')
         }
+
+        const senhaIguais = compare(dto.senha, usuario.senha)
+
+        if (!senhaIguais) {
+            throw new Error('Usuario ou senha invalido')
+        }
+
+        const accessToken = sign({
+            id: usuario.id,
+            email: usuario.email
+        }, jsonSecret.secret, {
+            expiresIn: 86400
+        })
+
+        return { accessToken }
     }
 }
-
 module.exports = AuthService

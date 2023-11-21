@@ -8,14 +8,14 @@ class AuthController {
 
         try {
             const login = await authService.login({email, senha})
-
+    
             res.status(200).send(login)
         } catch (error) {
-            res.status(401).send({message: error.message})
+            res.status(401).send({ message: error.message})
         }
 
-
     }
+
 }
 
 module.exports = AuthController
