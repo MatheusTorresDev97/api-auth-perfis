@@ -23,7 +23,7 @@ const roles = (listaRoles) => {
 
         const rolesCadastradas = usuario.usuarios_roles
         .map((role) => role.nome)
-        .some((role) => listaRoles.include(role))
+        .some((role) => listaRoles.includes(role))
 
         if(!rolesCadastradas) {
             res.status(401).send('Usuario não possui acesso a essa rota')
