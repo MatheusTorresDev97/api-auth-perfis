@@ -1,9 +1,7 @@
 const database = require('../models')
-
 const permissoes = (listaPermissoes) => {
     return async (req, res, next) => {
         const { usuarioId } = req
-
         const usuario = await database.usuarios.findOne({
             include: [
                 {
@@ -16,21 +14,16 @@ const permissoes = (listaPermissoes) => {
                 id: usuarioId
             }
         })
-
-        if(!usuario) {
-            return res.status(401).send('Usuário não cadastrado')
+        if (!usuario) {
+            return res.status(401).send('Usuario não cadastrado')
         }
-
         const permissoesCadastradas = usuario.usuario_permissoes
-        .map((permissao) => permissao.nome)
-        .some((permissao) => listaPermissoes.includes(permissao))
-
-        if(!permissoesCadastradas) {
-            return res.status(401).send('Usuario não possui acesso a essa rota')
+            .map((permissao) => permissao.nome)
+            .some((permissao) => listaPermissoes.includes(permissao))
+        if (!permissoesCadastradas) {
+            return res.status(401).send('Usuario nao possui acesso a essa rota')
         }
-
         return next()
     }
 }
-
 module.exports = permissoes
